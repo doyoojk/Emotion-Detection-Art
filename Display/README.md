@@ -45,8 +45,6 @@ python emotions.py --mode display
 
 * This implementation by default detects emotions on all faces in the webcam feed. With a simple 4-layer CNN, the test accuracy reached 63.2% in 50 epochs.
 
-![Accuracy plot](imgs/accuracy.png)
-
 ## Data Preparation (optional)
 
 * The [original FER2013 dataset in Kaggle](https://www.kaggle.com/deadskull7/fer2013) is available as a single csv file. I had converted into a dataset of images in the PNG format for training/testing and provided this as the dataset in the previous section.
