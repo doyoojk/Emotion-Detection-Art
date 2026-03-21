@@ -1,5 +1,7 @@
 let patternManager;
 let socket;
+let mode = 'unknown';
+let browserDetector = null;
 
 const PATTERN_CLASSES = {
     happy: HappyPattern,
@@ -12,7 +14,6 @@ const PATTERN_CLASSES = {
 };
 
 const MAX_PATTERNS = 30;
-// Minimum frames between spawns of the same emotion
 const COOLDOWNS = {
     happy: 30,
     sad: 60,
@@ -33,7 +34,6 @@ class PatternManager {
         const PatternClass = PATTERN_CLASSES[emotion];
         if (!PatternClass) return;
 
-        // Enforce cooldown per emotion
         const now = frameCount;
         const cooldown = COOLDOWNS[emotion] || 40;
         if (this.lastSpawn[emotion] && now - this.lastSpawn[emotion] < cooldown) return;
@@ -56,15 +56,61 @@ class PatternManager {
     }
 }
 
+function handleEmotion(emotion, intensity) {
+    patternManager.triggerEmotion(emotion, intensity);
+    document.getElementById('emotion-label').textContent = emotion;
+}
+
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     patternManager = new PatternManager();
+    detectMode();
+}
 
-    socket = io();
-    socket.on('emotion', (data) => {
-        patternManager.triggerEmotion(data.emotion, data.intensity || 0.5);
-        document.getElementById('emotion-label').textContent = data.emotion;
+function detectMode() {
+    // Check if socket.io is available (won't be on GitHub Pages without the CDN, but we include it)
+    if (typeof io !== 'undefined') {
+        socket = io({ timeout: 3000, reconnectionAttempts: 1 });
+
+        socket.on('connect', () => {
+            mode = 'local';
+            console.log('Local mode: connected to Python backend');
+            socket.on('emotion', (data) => {
+                handleEmotion(data.emotion, data.intensity || 0.5);
+            });
+        });
+
+        socket.on('connect_error', () => {
+            if (mode === 'unknown') {
+                socket.disconnect();
+                startBrowserMode();
+            }
+        });
+
+        // Fallback timeout
+        setTimeout(() => {
+            if (mode === 'unknown') {
+                socket.disconnect();
+                startBrowserMode();
+            }
+        }, 4000);
+    } else {
+        startBrowserMode();
+    }
+}
+
+function startBrowserMode() {
+    mode = 'browser';
+    console.log('Browser mode: using face-api.js for detection');
+
+    // Hide MJPEG img
+    const img = document.getElementById('webcam-feed');
+    if (img) img.style.display = 'none';
+
+    browserDetector = new BrowserEmotionDetector((emotion, intensity) => {
+        handleEmotion(emotion, intensity);
     });
+    browserDetector.init();
 }
 
 function draw() {

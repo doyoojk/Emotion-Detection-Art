@@ -25,6 +25,21 @@ def patterns(filename):
     return send_from_directory('static/patterns', filename)
 
 
+@app.route('/sketch.js')
+def sketch_js():
+    return send_from_directory('static', 'sketch.js')
+
+
+@app.route('/browser-detector.js')
+def browser_detector_js():
+    return send_from_directory('static', 'browser-detector.js')
+
+
+@app.route('/models/<path:filename>')
+def models(filename):
+    return send_from_directory('static/models', filename)
+
+
 def _generate_mjpeg():
     while True:
         with _frame_lock:
