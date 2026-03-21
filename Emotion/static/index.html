@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emotion Art</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body { overflow: hidden; background: #000; }
+        canvas { display: block; }
+        #webcam-container {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 10;
+            text-align: center;
+        }
+        #emotion-label {
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0.9;
+        }
+        #webcam-feed {
+            width: 240px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            opacity: 0.9;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="/patterns/happy.js"></script>
+    <script src="/patterns/sad.js"></script>
+    <script src="/patterns/angry.js"></script>
+    <script src="/patterns/scared.js"></script>
+    <script src="/patterns/surprised.js"></script>
+    <script src="/patterns/disgust.js"></script>
+    <script src="/patterns/neutral.js"></script>
+    <script src="/static/sketch.js"></script>
+    <div id="webcam-container">
+        <div id="emotion-label">--</div>
+        <img id="webcam-feed" src="/video_feed" alt="Webcam">
+    </div>
+</body>
+</html>
