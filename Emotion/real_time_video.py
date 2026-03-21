@@ -1,30 +1,36 @@
-# from keras.preprocessing.image import img_to_array
-from tensorflow.keras.utils import img_to_array
+import os
+os.environ["KERAS_BACKEND"] = "jax"
+
+print("[1/5] Importing imutils...")
 import imutils
+print("[2/5] Importing cv2...")
 import cv2
-from keras.models import load_model
+print("[3/5] Importing numpy...")
 import numpy as np
+print("[4/5] Importing keras...")
+import keras
+print("[5/5] Importing displayemote...")
 from displayemote import update_display, change_display
+print("All imports done.")
 
 # parameters for loading data and images
 detection_model_path = 'haarcascade_files/haarcascade_frontalface_default.xml'
 emotion_model_path = 'models/_mini_XCEPTION.102-0.66.hdf5'
 
-# hyper-parameters for bounding boxes shape
-# loading models
+print("Loading face detection model...")
 face_detection = cv2.CascadeClassifier(detection_model_path)
-emotion_classifier = load_model(emotion_model_path, compile=False)
+print("Loading emotion model...")
+emotion_classifier = keras.models.load_model(emotion_model_path, compile=False)
+print("Models loaded.")
 EMOTIONS = ["angry" ,"disgust","scared", "happy", "sad", "surprised",
  "neutral"]
 
-
-#feelings_faces = []
-#for index, emotion in enumerate(EMOTIONS):
-   # feelings_faces.append(cv2.imread('emojis/' + emotion + '.png', -1))
-
-# starting video streaming
-#cv2.namedWindow('Face Cam :)')
+print("Starting webcam...")
 camera = cv2.VideoCapture(0)
+if not camera.isOpened():
+    print("ERROR: Could not open webcam.")
+    exit(1)
+print("Webcam ready. Press 'q' to quit.")
 while True:
     frame = camera.read()[1]
     #reading the frame
@@ -43,7 +49,7 @@ while True:
         roi = gray[fY:fY + fH, fX:fX + fW]
         roi = cv2.resize(roi, (64, 64))
         roi = roi.astype("float") / 255.0
-        roi = img_to_array(roi)
+        roi = np.expand_dims(roi, axis=-1) if roi.ndim == 2 else roi
         roi = np.expand_dims(roi, axis=0)
         
         
