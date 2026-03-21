@@ -43,10 +43,15 @@ class BrowserEmotionDetector {
         // Request webcam
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 300, height: 225, facingMode: 'user' },
+                video: { facingMode: 'user' },
             });
             this.video.srcObject = stream;
             await this.video.play();
+            // Wait for actual video dimensions to be available
+            await new Promise((resolve) => {
+                if (this.video.videoWidth > 0) return resolve();
+                this.video.addEventListener('loadedmetadata', resolve, { once: true });
+            });
         } catch (err) {
             if (label) label.textContent = 'camera access denied';
             console.error('Webcam error:', err);
@@ -58,10 +63,17 @@ class BrowserEmotionDetector {
         const img = document.getElementById('webcam-feed');
         if (img) img.style.display = 'none';
 
+        const isMobile = window.innerWidth <= 600;
+        const feedWidth = isMobile ? 100 : 240;
+        const videoAspect = this.video.videoHeight / this.video.videoWidth;
+        const feedHeight = Math.round(feedWidth * videoAspect);
+
         this.canvas = document.createElement('canvas');
         this.canvas.id = 'webcam-canvas';
-        this.canvas.width = 240;
-        this.canvas.height = 180;
+        this.canvas.width = this.video.videoWidth;
+        this.canvas.height = this.video.videoHeight;
+        this.canvas.style.width = feedWidth + 'px';
+        this.canvas.style.height = feedHeight + 'px';
         this.canvas.style.borderRadius = '8px';
         this.canvas.style.border = '1px solid rgba(255, 255, 255, 0.2)';
         this.canvas.style.opacity = '0.9';

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Emotion Art</title>
     <style>
         * { margin: 0; padding: 0; }
-        body { overflow: hidden; background: #000; }
+        html, body { overflow: hidden; background: #000; width: 100%; height: 100dvh; touch-action: none; }
         canvas { display: block; }
         #webcam-container {
             position: fixed;
@@ -29,6 +30,18 @@
             border-radius: 8px;
             opacity: 0.9;
             display: block;
+        }
+        @media (max-width: 600px) {
+            #webcam-container {
+                bottom: 8px;
+                right: 8px;
+            }
+            #webcam-feed, #webcam-canvas {
+                width: 120px !important;
+            }
+            #emotion-label {
+                font-size: 11px;
+            }
         }
     </style>
 </head>

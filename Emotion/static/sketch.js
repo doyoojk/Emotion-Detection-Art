@@ -61,8 +61,17 @@ function handleEmotion(emotion, intensity) {
     document.getElementById('emotion-label').textContent = emotion;
 }
 
+function getViewportSize() {
+    const vv = window.visualViewport;
+    return {
+        w: vv ? vv.width : window.innerWidth,
+        h: vv ? vv.height : window.innerHeight,
+    };
+}
+
 function setup() {
-    createCanvas(windowWidth, windowHeight, WEBGL);
+    const vp = getViewportSize();
+    createCanvas(vp.w, vp.h, WEBGL);
     patternManager = new PatternManager();
     detectMode();
 }
@@ -119,5 +128,6 @@ function draw() {
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    const vp = getViewportSize();
+    resizeCanvas(vp.w, vp.h);
 }
