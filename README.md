@@ -1,4 +1,5 @@
 # Emotion-Detection-Art
+[Link to Interactive Page](https://doyoojk.github.io/Emotion-Detection-Art/)
 
 An interactive art installation that detects facial emotions in real time via webcam and generates dynamic visual art using Python Turtle graphics.
 
