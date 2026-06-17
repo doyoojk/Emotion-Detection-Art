@@ -4,7 +4,16 @@
 An interactive art installation that detects facial emotions in real time via webcam and generates dynamic visual art using Python Turtle graphics.
 
 <div align="center">
-  <img src="https://github.com/doyoojk/Emotion-Detection-Art/blob/main/EmotionDetectionEX.gif">
+  <table>
+    <tr>
+      <th>v1</th>
+      <th>v2</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/doyoojk/Emotion-Detection-Art/blob/main/EmotionDetectionEX.gif?raw=true" width="420"></td>
+      <td><img src="https://github.com/doyoojk/Emotion-Detection-Art/blob/main/EmotionDetectionV2.gif?raw=true" width="420"></td>
+    </tr>
+  </table>
 </div>
 
 ## How It Works
